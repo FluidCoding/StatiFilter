@@ -1,0 +1,67 @@
+body{
+	background-color:#663300;
+
+}
+p{
+	display:inline;
+	font-family:"Courier New";
+	font-weight:bold;
+}
+#ui{
+	text-align:center;
+	background-color: #000000;
+	padding-top:5px;
+	padding-bottom:5px;
+}
+#match{
+	background-color: #000000;
+	text-align:center;
+	color:#FFFFFF;
+	font-family:"Impact";
+	padding-top: 20px;
+	padding-bottom: 20px;
+}
+#rd {
+	color:#007A00;
+	font-family:"Arial";
+}
+#dr {
+	color:#B20000;
+	font-family:"Arial";
+}
+caption{
+	font-size:16px;
+	font-weight:bold;
+}
+tr, th, td{
+	color:#FFFFFF;
+	background-color:#333;
+	font-family:"Tahoma";
+	padding: 3px;
+	font-size:15px;
+	font-weight: normal;
+
+}
+form input[type=text]{
+	background-color:;
+	font-family: "Courier New";
+	font-weight:bold;
+	font-size:16pt;
+	width: 332px;
+}
+
+form input[type=submit]{
+	padding:3px;
+	background-color:#99cc00;
+	font-family:"Impact";
+	font-size:14pt;
+
+}
+table{
+	text-align:center;
+	color:#FFFFFF;
+	font-family:"Impact";
+	margin: 0 auto;
+	padding: 5px;
+	background-color: #202020;
+}
