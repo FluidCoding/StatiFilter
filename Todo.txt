@@ -1,0 +1,6 @@
+// Todo 
+* Get Steam/dota name from account id
+* Make Player view store matches in db
+* Crawl past matches from dota buff (weeeeee)
+* Get Friends list (no storing heree)
+*

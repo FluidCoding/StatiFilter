@@ -1,5 +1,7 @@
 <?php
 require 'vars.php';
+error_reporting(E_ALL);
+ini_set('display_errors', 'On');
 $match_id_Url = "http://api.steampowered.com/IDOTA2Match_570/GetMatchDetails/V001/?match_id=";
 /**
 	Lookup match data from the match id
