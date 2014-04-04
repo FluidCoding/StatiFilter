@@ -1,6 +1,7 @@
 <?php
-    $api_key = "2B478746F438BCE5A61353D44927EB0B"; // Insert API Key here!
-
+    
+    require './vars.php';
+    $api_key = $API_KEY;
     $urla = "http://api.steampowered.com/ISteamUser/GetPlayerSummaries/v0002/?key=" . $api_key; 
     $urlb = "&steamids=";
     $urlc = $urla . $urlb;

@@ -5,15 +5,24 @@
 	require 'steamauth/steamauth.php';
 
 	$user_Url = "https://api.steampowered.com/IDOTA2Match_570/GetMatchHistory/V001/?key=".$API_KEY;
-function lookupUser($u_id){
+function lookupUser($u_id, $start_match){
 	global $user_Url;
-	$url = $user_Url . "&account_id=" . $u_id;                 //76561197990498989";   
-	$file_path = "Players/" . $u_id.".json";
-	if(file_exists($file_path)){
+	$url = "";
+	$page = 0;
+	if($start_match == 0){
+		$url = $user_Url . "&account_id=" . $u_id;                 //76561197990498989";   
+	}else{
+		$url = $user_Url . "&account_id=" . $u_id . "&start_at_match_id=" . $start_match;
+	}
+
+	$file_path = "Players/" . $u_id."(" . $page . ").json";
+//	$match_data = "";
+//	if(file_exists($file_path)){
+	if(false){
 		$fp = fopen($file_path, "r");
 		$results = fread($fp, filesize($file_path));
 		$match_data = json_decode($results);
-		print_search_results($match_data);
+//		print_search_results($match_data);
 		//printMatch($match_data);
 		fclose($fp);
 	}
@@ -38,11 +47,34 @@ function lookupUser($u_id){
 	}
 	return $match_data;
 }  
+function clearPlayerCache(){
+	$files = glob('Players/*'); // get all file names
+	foreach($files as $file){ // iterate files
+		if(is_file($file))
+    		unlink($file); // delete file
+	}
+}
 
 function gatherMatches($steamprofile){
 	global $user_Url;
-	echo $steamprofile['steamid'];
-
+	$page = lookupUser($steamprofile['steamid'], 0);
+	$matches = array();
+	echo "Steam Id: " . $steamprofile['steamid'] . "<br>";
+	$test = 0;
+	$num_matches = 0;
+	while($page->result->results_remaining > 1){
+		$i = 0;
+		while($i < $page->result->num_results){
+			array_push($matches, $page->result->matches[$i]->match_id);
+			$i++;
+			$num_matches++;
+		}
+		$page = lookupUser($steamprofile['steamid'], $matches[$num_matches-1]);
+		$test++;
+		echo "Matches Remaining: " . $page->result->results_remaining . "<br>";
+		sleep(1);
+	}
+	echo "Matches found: " . $num_matches . "<br>";
 }
 
 function print_search_results($player_data){
@@ -76,7 +108,7 @@ function print_search_results($player_data){
     	// Setup user index
 		//lookupUser($steamprofile['steamid']);
     	gatherMatches($steamprofile);
-
+    //	clearPlayerCache();
 //    	logoutbutton();
 	}   
 ?>
