@@ -8,9 +8,12 @@ class player{
 	private $steamObj;	// Contains user steam data
 	private $matches;	// Array of match id's
 	private $user_Url;	// Url to perform a match history query
-	private $match_id_Url; // = "http://api.steampowered.com/IDOTA2Match_570/GetMatchDetails/V001/?match_id=";
-	private $player_sum_Url;
-	private $dota_id;
+	private $match_id_Url; // Url to access match data
+	private $player_sum_Url;	// Url to get user summary
+	private $dota_id;	// 32bit steam id returned in GetMatchHistory
+	private $wins;
+	private $losses;
+	private $num_matches;
 
 	function __construct($sObj){
 		global $API_KEY;
@@ -26,32 +29,32 @@ class player{
 	/**
 		Get the last 500 matches of this player
 	*/
-
 	public function gatherMatches(){
-		global $user_Url;
-		
+		// Do first lookup on last 100 matches or so
 		$page = $this->lookupUser(0);
 		
+		// Counts number of matches found
 		$num_matches = 0;
-		$test = 0;
-
+		$test = 0;	// Used to prevent bugs\infinite loops for now
+		// Loop while theres still more matches to gather
 		while($page->result->results_remaining > 1 && $test<7){
 			$i = 0;
+			// Itterate through match results TODO: (check that it's actually hitting all matches)
 			while($i < $page->result->num_results){
 				array_push($this->matches, $page->result->matches[$i]->match_id);
 				$i++;
 				$num_matches++;
 			}
-			$page = $this->lookupUser($this->matches[$num_matches-1]);			
+			// Request another page
+			$page = $this->lookupUser($this->matches[$num_matches-1]);	
+			// Pop last entry off to prevent duplicats from start_match
 			array_pop($this->matches);
 			$num_matches--;
 			//echo ">> " . count($this->matches) . "<br>";
 			//echo "Matches Remaining: " . $page->result->results_remaining . "<br>";
-			sleep(1);
+			sleep(1);	// Dont kill valve servers yet
 			$test++;
 		}
-
-		//echo "Matches found: " . $num_matches . "<br>";
 	}
 
 	/**
@@ -63,17 +66,17 @@ class player{
 	public function lookupUser($start_match=0){
 //		global $user_Url;
 		$url = "";
-		$page = 0;
-
+		// If first page 
 		if($start_match == 0){
 			$url = $this->user_Url . "&account_id=" . $this->steamObj['steamid'];                 //76561197990498989";   
-		}else{
+		}else{	// start from specific last match id
 			$url = $this->user_Url . "&account_id=" . $this->steamObj['steamid'] . "&start_at_match_id=" . $start_match;
 		}
 
 		$file_path = "Players/" . $this->steamObj['steamid'] . ".json";
 	
 	//	$match_data = "";
+		// No caching for now
 	//	if(file_exists($file_path)){
 		if(false){
 			$fp = fopen($file_path, "r");
@@ -141,7 +144,7 @@ public function lookupMatch($match_id){
 /**
 	Save Match to file
 */
-function saveMatch($mData, $m_id){
+private function saveMatch($mData, $m_id){
 	if(!file_exists("Matches/".$m_id.".json")){
 		$fp = fopen("Matches/".$m_id.".json", "w");
 		fwrite($fp, $mData);
@@ -149,6 +152,11 @@ function saveMatch($mData, $m_id){
 	}
 }
 
+/**
+	Convert 32bit steamid to steam personaname
+	@param $s_id steam id to convert
+	@return steam persona (anonymous included by const)  
+*/
 private function get_players_persona($s_id){
 	if($s_id == "4294967295")
 		return "Anonymous";
@@ -185,6 +193,7 @@ function printMatch($mData){
 
 	echo "<p> Winner: ". $winner . "<br>";
 
+	// Radiant Data
 	echo "<div id='teams'>";
 		echo "<table>
    			<caption id='rd'>The Radiant</caption>
@@ -238,6 +247,7 @@ function printMatch($mData){
 		
 	echo "<br><br>";
 
+	// Dire data
 	echo "<div id='teams'>";
 		echo "<table>
    			<caption id='dr'>The Dire</caption>
@@ -340,7 +350,8 @@ function printMatch($mData){
 			echo $player_data->result->matches[$i]->match_id . "<br>";
 			$i++;
 		}
-}
+	}
+
 
 }
 ?>

@@ -49,8 +49,8 @@ function clearMatchCache(){
 		// Print Last game
 		echo "Last game played: <br>";
 		$p->lookupMatch($p->get_match(0));
-
-
+		
+		
     	//$p->printMatches();
     	//Protected content
     	//echo "Yo MoFuckin Steam ID is: " . $steamprofile['steamid'] . "<br>";
