@@ -1,6 +1,15 @@
 // Todo 
-* Get Steam/dota name from account id
-* Make Player view store matches in db
+* Matchup Item id's, Hero id's, Ability id's, Lobby type to strings/pics
 * Crawl past matches from dota buff (weeeeee)
-* Get Friends list (no storing heree)
-*
+* Get Friends list 
+	** Store Friends matches
+* Redesign front-end html/css for index.php
+	** Best Heros
+	** Most played hero
+	** Current streak with
+* Create a main player file to hold class info
+
+####NOTES#####
+Steamid maths
+My steamid: 76561198048818422
+76561198048818422 - 76561197960265728 = 8855270
