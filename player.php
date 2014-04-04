@@ -9,6 +9,7 @@ class player{
 	private $matches;	// Array of match id's
 	private $user_Url;	// Url to perform a match history query
 	private $match_id_Url; // = "http://api.steampowered.com/IDOTA2Match_570/GetMatchDetails/V001/?match_id=";
+	private $player_sum_Url;
 	private $dota_id;
 
 	function __construct($sObj){
@@ -17,6 +18,7 @@ class player{
 		$this->matches = array();
 		$this->user_Url = "https://api.steampowered.com/IDOTA2Match_570/GetMatchHistory/V001/?key=" . $API_KEY;
 		$this->match_id_Url = "http://api.steampowered.com/IDOTA2Match_570/GetMatchDetails/V001/?key=" . $API_KEY . "&match_id=";
+		$this->player_sum_Url = "http://api.steampowered.com/ISteamUser/GetPlayerSummaries/v0002/?key=" . $API_KEY . "&steamids=";
 		$this->dota_id = $sObj['steamid'] - 76561197960265728;
 //		echo 'Player Instantiated.<br>';
 	}
@@ -147,6 +149,27 @@ function saveMatch($mData, $m_id){
 	}
 }
 
+private function get_players_persona($s_id){
+	if($s_id == "4294967295")
+		return "Anonymous";
+	if($s_id == $this->dota_id)
+		return $this->steamObj['personaname'];
+	$url = $this->player_sum_Url . ($s_id + 76561197960265728);
+	$ch = curl_init();
+	curl_setopt($ch, CURLOPT_URL, $url);
+	curl_setopt($ch, CURLOPT_HEADER, 0);
+	curl_setopt($ch, CURLOPT_RETURNTRANSFER, TRUE);
+		// Do work with results
+	$results = curl_exec($ch);
+	$player_data = json_decode($results);
+	return $player_data->response->players[0]->personaname;
+	curl_close($ch);
+}
+
+private function getHero($h_id){
+
+
+}
 
 /**
 	Print Match to webpage
@@ -186,13 +209,8 @@ function printMatch($mData){
 //      				echo $this->steamObj['steamid'];
    		for($i=0; $i<5; $i++){
    			echo "<tr>" . "<td>" . $mData->result->players[$i]->hero_id  . "</td>";
-   			if($mData->result->players[$i]->account_id == "4294967295")
-				echo ("<td>Anonymous</td>" ); 
-
-      		else if($mData->result->players[$i]->account_id != $this->dota_id)
-				echo("<td>" . $mData->result->players[$i]->account_id . "</td>" ); 
-			else
-				echo ("<td>" . $this->steamObj['personaname']. "</td>" ); 
+			
+			echo "<td>" . $this->get_players_persona($mData->result->players[$i]->account_id) . "</td>";
 			echo("<td>" . $mData->result->players[$i]->level . "</td>");
 			echo("<td>" . $mData->result->players[$i]->kills . "</td>");
 			echo("<td>" . $mData->result->players[$i]->deaths . "</td>");
@@ -244,12 +262,7 @@ function printMatch($mData){
    		for($i=5; $i<10; $i++){
    			echo "<tr>" . "<td>" . $mData->result->players[$i]->hero_id  . "</td>";
       		
-   			if($mData->result->players[$i]->account_id == "4294967295")
-				echo ("<td>Anonymous</td>" ); 
-      		else if($mData->result->players[$i]->account_id != $this->dota_id)
-				echo("<td>" . $mData->result->players[$i]->account_id . "</td>" ); 
-			else
-				echo ("<td>" . $this->steamObj['personaname']. "</td>" ); 
+      		echo "<td>" . $this->get_players_persona($mData->result->players[$i]->account_id) . "</td>";
 			echo("<td>" . $mData->result->players[$i]->level . "</td>");
 			echo("<td>" . $mData->result->players[$i]->kills . "</td>");
 			echo("<td>" . $mData->result->players[$i]->deaths . "</td>");
