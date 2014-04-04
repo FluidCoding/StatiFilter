@@ -1,11 +1,10 @@
 <?php
+
 	error_reporting(E_ALL);
 	ini_set('display_errors', 'On');
 	require 'vars.php';
 	require 'steamauth/steamauth.php';
 	require 'player.php';
-
-	$user_Url = "https://api.steampowered.com/IDOTA2Match_570/GetMatchHistory/V001/?key=".$API_KEY;
 
 /**
 	Use for maintenance DELTES ALL FILES in /Players/*
@@ -18,18 +17,16 @@ function clearPlayerCache(){
 	}
 }
 
-function print_search_results($player_data){
-//	var_dump($player_data);
-	//echo $player_data->result . "<br>";
-	$i = 0;
-	echo "Heres some match id's....Do shit.";
-	echo $player_data->result->num_results . ' of ' . $player_data->result->total_results . "<br>";
-	while($i<$player_data->result->num_results){
-		echo $player_data->result->matches[$i]->match_id . "<br>";
-		$i++;
+/**
+	Deletes ALL files in Matches directory
+*/
+function clearMatchCache(){
+	$files = glob('Matches/*');
+	foreach($files as $file){
+		if(is_file($file))
+    		unlink($file);
 	}
 }
-
 
 
 	// Main Code
@@ -43,13 +40,45 @@ function print_search_results($player_data){
     	logoutbutton();
     	$p = new player($steamprofile);
     	$p->gatherMatches();
-    	$p->printMatches();
+
+    	echo '<img src="'.$steamprofile['avatarmedium'].'" title="" alt="" /><br>';
+    	echo "<h2>" . $steamprofile['personaname'] . "</h2><br>"; 
+		echo "Matches Found: " . $p->get_num_matches() . "<br>";    	
+
+		echo "Steam id: " . $steamprofile['steamid'] . "<br>";
+		// Print Last game
+		echo "Last game played: <br>";
+		$p->lookupMatch($p->get_match(0));
+
+
+    	//$p->printMatches();
     	//Protected content
     	//echo "Yo MoFuckin Steam ID is: " . $steamprofile['steamid'] . "<br>";
-    	//echo '<img src="'.$steamprofile['avatarmedium'].'" title="" alt="" /><br>';
     	//echo "Whatsup " . $steamprofile['personaname'] . "?!</br>";
     	// Checkout some stats
     	// Setup user index
 		//lookupUser($steamprofile['steamid']);
 	}   
 ?>
+
+
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Dota 2 Stats</title>
+	<link rel="stylesheet" href="s.css">
+</head>
+
+<body>
+<form name="matchinput" id="ui" action="search.php" method="post">
+	<input type="text" placeholder="Enter Dota 2 Match ID..." name="match">
+	<input type="submit" value="Search">
+</form>
+
+<form name="usninput" id="ui" action="us.php" method="post">
+	<input type="text" placeholder="Enter Steam Id..." name="user">
+	<input type="submit" value="Search">
+</form>
+
+</body>
+</html>
