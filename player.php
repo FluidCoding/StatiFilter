@@ -14,6 +14,7 @@ class player{
 	private $wins;
 	private $losses;
 	private $num_matches;
+	private $mySqlCon;
 
 	function __construct($sObj){
 		global $API_KEY;
@@ -194,7 +195,7 @@ function printMatch($mData){
 	echo "<p> Winner: ". $winner . "<br>";
 
 	// Radiant Data
-	echo "<div id='teams'>";
+	echo "<div class'teams'>";
 		echo "<table>
    			<caption id='rd'>The Radiant</caption>
    				<thead>
@@ -248,7 +249,7 @@ function printMatch($mData){
 	echo "<br><br>";
 
 	// Dire data
-	echo "<div id='teams'>";
+	echo "<div class='teams'>";
 		echo "<table>
    			<caption id='dr'>The Dire</caption>
    				<thead>
@@ -323,6 +324,21 @@ function printMatch($mData){
 			return 0;
 	}
 
+	/**
+		Save Player data to file 	
+	*/
+	function savePlayer(){
+
+
+	}
+
+	/**
+		Load Player from file
+	*/
+	function loadPlayer(){
+
+
+	}
 
 	/**
 		print all the match id's on record for this player
@@ -351,7 +367,19 @@ function printMatch($mData){
 			$i++;
 		}
 	}
-
+	/*
+	function saveMatches($con){
+		$mySqlCon = $con;
+				   	//codinghs_dota_stat
+			//codinghs_statman
+			//!{([!stw*?0N
+		$i=0;
+		while($i<$num_matches){
+			mysql_query($con, 'inset into matches ')
+			$i++;
+		}
+	}
+*/
 
 }
 ?>

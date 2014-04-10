@@ -6,7 +6,7 @@ require './vars.php';
 $api_key = $API_KEY;
 
 function logoutbutton() {
-    echo "<form action=\"steamauth/logout.php\" method=\"post\"><input value=\"Logout\" type=\"submit\" /></form>"; //logout button
+    echo "<form action=\"steamauth/logout.php\" method=\"post\"><input class=\"logout\" value=\"Logout\" type=\"submit\" /></form>"; //logout button
 }
 
 function steamlogin()
@@ -19,8 +19,7 @@ try {
             $openid->identity = 'http://steamcommunity.com/openid';
             header('Location: ' . $openid->authUrl());
         }
-    echo "<form action=\"?login\" method=\"post\"> <input type=\"image\" src=\"http://cdn.steamcommunity.com/public/images/signinthroughsteam/sits_large_border.png\"></form>";
-}
+ }
 
      elseif($openid->mode == 'cancel') {
         echo 'User has canceled authentication!';

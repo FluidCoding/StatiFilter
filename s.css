@@ -1,6 +1,46 @@
 body{
-	background-color:#663300;
-
+	background-color:#480000;
+	
+}
+.wrapper{
+	width: 80%;
+	height: auto;
+	min-height: 500px;
+	margin: 20px auto;
+	background-color:#111111;
+	min-width: 800px;
+	max-width: 1100px;
+	border-radius:7px;
+	border-top: 2px solid #222222;
+	box-shadow: 5px 5px 2px #200000;
+	padding: 12px;
+}
+.logout{
+	border-radius:3px;
+	margin: 2px;
+	margin-bottom: 180px;
+	width: 110px;
+	float: right;
+}
+.signin{
+	color: #EEE;
+	background-color:#0A0A0A;
+	border-color: #110000;
+	border-style: solid;
+	border-width:5px;
+	max-width: 600px;
+	border-radius:6px;
+	float: right;
+	margin-top: 15px;
+	padding-bottom: 10px;
+	margin-right: 5px;
+	width: 200px;
+	height: 120px;
+}
+.loginBtn{
+	padding: 15px;
+	width:155px;
+	height: 25px;
 }
 p{
 	display:inline;
@@ -13,12 +53,12 @@ p{
 	padding-top:5px;
 	padding-bottom:5px;
 }
-#match{
+.match{
 	background-color: #000000;
 	text-align:center;
 	color:#FFFFFF;
 	font-family:"Impact";
-	padding-top: 20px;
+	padding-top: 40px;
 	padding-bottom: 20px;
 }
 #rd {
